@@ -12,10 +12,11 @@ class Threat:
 
 
 class BallisticMissile(Threat):
-    def location_update(self,location, velocity, direction, power):
-        super().__init__("allisticMissile",location, velocity, direction, power)
+    def __init__(self, location, velocity, direction, power):
+        super().__init__("BallisticMissile", location, velocity, direction, power)
         self.x, self.y = location 
         self.vx, self.vy = velocity
+    
     def location_update(self):
         self.x = self.x + self.vx * dt
         self.vy = self.vy - 9.8 * dt                                              
