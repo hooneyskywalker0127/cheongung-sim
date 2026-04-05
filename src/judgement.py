@@ -1,8 +1,9 @@
 import math
 
 class HitJudgement:
-    def __init__(self, kill_radius=50, target_x, target_y):
+    def __init__(self, target_x, target_y, kill_radius=50, target_radius = 100):
         self.kill_radius = kill_radius
+        self.target_radius = target_radius
         self.target_x = target_x
         self.target_y= target_y
 
@@ -19,4 +20,4 @@ class HitJudgement:
         dx = self.target_x - threat.x
         dy = self.target_y - threat.y
         distance = math.sqrt(dx**2 + dy**2)
-        return distance <= self.kill_radius
+        return distance <= self.target_radius
