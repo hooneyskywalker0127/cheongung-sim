@@ -27,7 +27,7 @@ class Metrics:
         df = pd.DataFrame({
     "threat_type" : ["BallisticMissile", "CruiseMissile","Drone" ],
     "success" : list(self.intercept_success.values()),
-    "fail" : list(self.self.intercept_fail.values()),
+    "fail" : list(self.intercept_fail.values()),
     "number_hit" :list(self.number_hit.values()),
     "battle_time" : [self.battle_time]
 
