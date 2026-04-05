@@ -58,9 +58,9 @@
 ### ThreatGenerator
 Creates threat objects and updates their trajectories each frame.
 
-- **Ballistic missile:** Parabolic trajectory, high speed (up to Mach 5), high altitude
-- **Cruise missile:** Horizontal straight flight, medium speed, low altitude
-- **Drone:** Irregular maneuvering, low speed, very low altitude
+- **Ballistic missile:** Parabolic trajectory (gravity 9.8 applied), high speed (up to Mach 5), high altitude — x moves + vy decreases
+- **Cruise missile:** Horizontal straight flight (constant altitude), medium speed, low altitude — x only
+- **Drone:** Irregular maneuvering, low speed, very low altitude — random variation in both x and y
 - Loads threat launch time and quantity from scenario file (JSON)
 
 ### Radar

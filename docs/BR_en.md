@@ -25,10 +25,10 @@ This project aims to implement an intercept simulation based on Cheongung-II's a
 ## 3. Scope
 
 **Phase 1 (This Document)**
-- 2D top-view simulation
+- 2D side-view simulation (x: horizontal distance, y: altitude)
 - Threat types: Ballistic missiles, cruise missiles, drones (mixed)
-- Friendly assets: 1 Cheongung-II battery
-- Defense target: 1 key facility (e.g., air base)
+- Friendly assets: 1 Cheongung-II battery (fixed at bottom of screen)
+- Defense target: 1 key facility (e.g., air base, placed on ground next to battery)
 
 **Phase 2 and Beyond (TBD)**
 - Multi-battery cooperative engagement
@@ -40,9 +40,9 @@ This project aims to implement an intercept simulation based on Cheongung-II's a
 ## 4. Functional Requirements
 
 ### 4.1 Threat Generation
-- Ballistic missile: High speed (up to Mach 5), high altitude, parabolic trajectory
-- Cruise missile: Medium speed, low altitude, horizontal flight
-- Drone: Low speed, very low altitude, irregular maneuvering
+- Ballistic missile: High speed (up to Mach 5), high altitude, parabolic trajectory (gravity applied)
+- Cruise missile: Medium speed, low altitude, horizontal straight flight (constant altitude)
+- Drone: Low speed, very low altitude, irregular maneuvering (random variation in both x and y)
 - Multiple threats can be launched simultaneously or sequentially
 
 ### 4.2 Radar Detection
@@ -102,4 +102,4 @@ This project aims to implement an intercept simulation based on Cheongung-II's a
 
 - Solo development, 2-week completion target
 - No classified military data (based on public information only)
-- No 3D rendering (2D only)
+- No 3D rendering (2D side-view only)
