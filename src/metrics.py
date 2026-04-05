@@ -28,15 +28,8 @@ class Metrics:
     "threat_type" : ["BallisticMissile", "CruiseMissile","Drone" ],
     "success" : list(self.intercept_success.values()),
     "fail" : list(self.intercept_fail.values()),
-    "number_hit" :list(self.number_hit.values()),
-    "battle_time" : [self.battle_time]
-
-
-
-
-
-
-
+    "number_hit" :list(self.number_hit.values())
 
 })
+        df.to_csv("results/metrics.csv", index=False)
 
