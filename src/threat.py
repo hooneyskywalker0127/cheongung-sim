@@ -1,11 +1,10 @@
 import random
 
 class Threat:
-    def __init__(self, type, location, velocity, direction, power):
+    def __init__(self, type, location, velocity, power):
         self.type = type
         self.location = location
         self.velocity = velocity
-        self.direction = direction
         self.power = power
 
     def location_update(self):
@@ -14,8 +13,8 @@ class Threat:
 
 
 class BallisticMissile(Threat):
-    def __init__(self, location, velocity, direction, power):
-        super().__init__("BallisticMissile", location, velocity, direction, power)
+    def __init__(self, location, velocity, power):
+        super().__init__("BallisticMissile", location, velocity, power)
         self.x, self.y = location 
         self.vx, self.vy = velocity
     
@@ -26,8 +25,8 @@ class BallisticMissile(Threat):
 
 
 class CruiseMissile(Threat):
-    def __init__(self, location, velocity, direction, power):
-        super().__init__("CruiseMissile", location, velocity, direction, power)
+    def __init__(self, location, velocity, power):
+        super().__init__("CruiseMissile", location, velocity, power)
         self.x, self.y = location 
         self.vx, self.vy = velocity
 
@@ -35,8 +34,8 @@ class CruiseMissile(Threat):
         self.x = self.x + self.vx * dt
 
 class Drone(Threat):
-    def __init__(self, location, velocity, direction, power):
-        super().__init__("Drone", location, velocity, direction, power)
+    def __init__(self, location, velocity, power):
+        super().__init__("Drone", location, velocity, power)
         self.x, self.y = location 
         self.vx, self.vy = velocity
 
