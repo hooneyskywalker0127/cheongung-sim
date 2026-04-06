@@ -20,18 +20,18 @@
 ## Phase 1 — 환경 세팅 + 기초 컴포넌트
 **기간:** 2026-04-04 ~ 2026-04-05 (2일)
 
-- [ ] Python 환경 세팅 (requirements.txt)
-- [ ] 디렉토리 구조 생성
-- [ ] `threat.py` — 위협 객체 생성 및 위치 업데이트
-- [ ] `metrics.py` — 메트릭 수집 및 CSV 저장
+- [x] Python 환경 세팅 (requirements.txt)
+- [x] 디렉토리 구조 생성
+- [x] `threat.py` — 위협 객체 생성 및 위치 업데이트
+- [x] `metrics.py` — 메트릭 수집 및 CSV 저장
 
 ---
 
 ## Phase 2 — 판정 + 레이더
 **기간:** 2026-04-06 ~ 2026-04-07 (2일)
 
-- [ ] `judgement.py` — Hit-to-Kill 거리 판정
-- [ ] `radar.py` — 탐지 반경 계산, 탐지 확률 처리
+- [x] `judgement.py` — Hit-to-Kill 거리 판정
+- [x] `radar.py` — 탐지 반경 계산, 탐지 확률 처리
 
 ---
 
