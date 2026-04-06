@@ -1,5 +1,6 @@
 import random
 
+
 class Threat:
     def __init__(self, type, location, velocity, power):
         self.type = type
