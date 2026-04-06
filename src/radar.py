@@ -1,5 +1,6 @@
 from threat import Threat
 import math
+import random
 
 
 class Radar:
@@ -15,4 +16,5 @@ class Radar:
             dx = self.radar_x - threat.x
             dy = self.radar_y - threat.y
             distance = math.sqrt(dx**2 + dy**2)
-
+            if distance <= self.detection_range:
+                if random.random() <= self.detection_prob[threat.type]:
