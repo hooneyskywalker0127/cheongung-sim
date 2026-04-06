@@ -18,3 +18,5 @@ class Radar:
             distance = math.sqrt(dx**2 + dy**2)
             if distance <= self.detection_range:
                 if random.random() <= self.detection_prob[threat.type]:
+                    detected.append(threat)
+        return detected
