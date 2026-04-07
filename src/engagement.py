@@ -18,3 +18,9 @@ class Engagement:
             distance_score = 1/np.sqrt(threat.x**2+threat.y**2)
             total_score = speed_score + altitude_score + distance_score
             score.append((total_score,threat))
+
+        return sorted(score, key=lambda x:x[0], reverse=True)
+    
+    def intercept(self,prioritized_threats):
+        if self.remaining_missiles == 0:
+            return False
