@@ -24,3 +24,12 @@ class Engagement:
     def intercept(self,prioritized_threats):
         if self.remaining_missiles == 0:
             return False
+        for score, threat in prioritized_threats:
+            if self.remaining_missiles == 0:
+                return False
+            missile = InterceptMissile(0,0, threat.x, threat.y)
+            self.missiles.append(missile)
+            self.remaining_missiles -= 1
+
+    def update_missiles(self):
+        for missile in self.missiles:
