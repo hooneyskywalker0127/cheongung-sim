@@ -31,5 +31,6 @@ class Engagement:
             self.missiles.append(missile)
             self.remaining_missiles -= 1
 
-    def update_missiles(self):
+    def update_missiles(self,dt):
         for missile in self.missiles:
+            missile.update(dt)
