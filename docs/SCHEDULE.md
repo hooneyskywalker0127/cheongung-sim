@@ -38,7 +38,7 @@
 ## Phase 3 — 교전 통제
 **기간:** 2026-04-08 ~ 2026-04-10 (3일)
 
-- [ ] `engagement.py` — 우선순위 점수 산출, Engagement Window, 미사일 할당
+- [x] `engagement.py` — 우선순위 점수 산출, Engagement Window, 미사일 할당 (2026-04-07 완료)
 
 ---
 
