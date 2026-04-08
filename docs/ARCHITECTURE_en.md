@@ -94,6 +94,54 @@ Tracks the target using a 3-phase guidance system.
 - Phase transitions triggered by distance thresholds
 - Separate steering logic implemented per phase
 
+#### Phase-by-Phase Detail
+
+**Phase 1 — INS (Inertial Navigation System)**
+
+Immediately after launch, the radar cannot yet track the missile (too close to the battery).
+The missile flies using only its internal sensors — no external signals.
+
+At launch, the predicted position of the threat is calculated based on its current position and velocity.
+The missile flies straight toward that predicted point with no course correction until the next phase.
+
+Simulation: Calculate predicted `(x, y)` from threat's position + velocity at launch time → set missile `vx, vy` toward that point.
+
+---
+
+**Phase 2 — Command Guidance**
+
+Once the missile has flown far enough, the ground radar can track it.
+The radar simultaneously tracks both the missile and the threat, then transmits correction commands wirelessly to the missile.
+
+Commands like "turn 3 degrees left" or "increase altitude" are sent every frame.
+The missile does not make its own decisions — it simply follows ground instructions.
+
+Simulation: Each frame, calculate direction vector from battery (radar) to threat → correct missile `vx, vy`.
+
+---
+
+**Phase 3 — Active Radar Homing (ARH)**
+
+When the missile is close enough to the threat, the missile's own onboard radar takes over.
+It detects and tracks the threat directly, with no need for ground commands.
+The missile autonomously chases the threat — the most precise phase.
+
+Even if the threat maneuvers, the missile adjusts in real time.
+
+Simulation: Each frame, look directly at threat's current `(x, y)` → adjust missile `vx, vy`.
+
+---
+
+**Phase Transition (Distance-Based)**
+
+```
+Just after launch     → Phase 1: INS            (distance to threat > 700m)
+Mid-range             → Phase 2: Command Guid.  (200m < distance ≤ 700m)
+Close range           → Phase 3: Active Homing  (distance ≤ 200m)
+```
+
+※ Transition distances are adjustable simulation parameters.
+
 ### HitJudgement
 Handles collision detection between intercept missiles and threats.
 
