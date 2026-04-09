@@ -15,7 +15,7 @@ class InterceptMissile:
         self.phase = 1
 
 
-    def update(self, dt):
+    def update(self, dt, threat):
         self.x += self.vx*dt
         self.y += self.vy*dt
         distance = math.sqrt((self.target_x-self.x)**2 + (self.target_y-self.y)**2)
@@ -23,13 +23,14 @@ class InterceptMissile:
             self.phase = 1
         elif 700 > distance > 200:
             self.phase = 2
-            battery_distance = math.sqrt((self.target_x-self.battery_x)**2 + (self.target_y-self.battery_y)**2)
-            self.vx = (self.target_x-self.battery_x) / battery_distance * self.speed
-            self.vy = (self.target_y-self.battery_y) / battery_distance * self.speed
-        
+            self.vx = (self.target_x-self.x) / distance * self.speed
+            self.vy = (self.target_y-self.y) / distance * self.speed
+        elif distance < 200:
+            self.phase = 3
+            self.target_x = threat.x
+            self.target_y = threat.y
+            self.vx = (self.target_x-self.x) / distance * self.speed
+            self.vy = (self.target_y-self.y) / distance * self.speed
 
-
-        elif 200 >= distance:
-            self.phase = 3 
 
 
