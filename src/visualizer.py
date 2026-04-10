@@ -10,7 +10,7 @@ class Visualizer:
         pygame.init()
         self.screen = pygame.display.set_mode(self.size)
         self.clock = pygame.time.Clock()
-
+        self.font = pygame.font.SysFont(None, 30)
 
     def event(self):
         for event in pygame.event.get():                                              
@@ -20,7 +20,8 @@ class Visualizer:
 
 
     def status_update(self):
-        pass
+        text = self.font.render(f"Missiles: {len(self.missiles)}", True, (255, 255, 255))
+        self.screen.blit(text, (10, 10))
 
     def rendering(self):
         self.screen.fill((0, 0, 0))
