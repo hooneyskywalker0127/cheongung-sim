@@ -1,5 +1,5 @@
 import pygame
-
+import matplotlib.pyplot as plt
 
 class Visualizer:
     def __init__(self,threats,missiles,radar):
@@ -53,10 +53,19 @@ class Visualizer:
 
 
 
-
-
-
-
 class ResultGraph:
-    def __init__(self):
-        pass
+    def __init__(self,metrics):
+        self.metrics = metrics
+
+    def draw_graph(self):
+        types = list(self.metrics.intercept_success.keys())
+        success = list(self.metrics.intercept_success.values())
+        fail = list(self.metrics.intercept_fail.values())
+
+        x = range(len(types))
+        plt.bar(x, success, width=0.4, label="Success", color="blue")
+        plt.bar([i + 0.4 for i in x], fail, width=0.4, label="Fail", color="red")
+        plt.xticks([i + 0.2 for i in x], types)
+        plt.title("Intercept Result")
+        plt.legend()
+        plt.show()
