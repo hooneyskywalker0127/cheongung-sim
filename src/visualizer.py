@@ -32,8 +32,14 @@ class Visualizer:
             else:                                                                         
                 color = (255, 255, 0)
             
-            pygame.draw.circle(self.screen, color, (threat.x, threat.y), 5) 
-            pygame.display.flip()
+            pygame.draw.circle(self.screen, color, (threat.x, threat.y), 5)
+        for missile in self.missiles:
+            color = (0,0,255)
+            pygame.draw.circle(self.screen, color, (missile.x, missile.y), 5)
+        
+        color = (0, 255, 0)
+        pygame.draw.rect(self.screen, color,(self.radar.radar_x, self.radar.radar_y, 10, 10))
+        pygame.display.flip()
     def run(self):
         running = True
         while running:
