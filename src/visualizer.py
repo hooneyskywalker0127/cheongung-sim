@@ -11,7 +11,11 @@ class Visualizer:
         self.screen = pygame.display.set_mode(self.size)
 
     def event(self):
-        pass
+        for event in pygame.event.get():                                              
+            if event.type == pygame.QUIT:                                             
+                return False                                                          
+        return True 
+
 
     def status_update(self):
         pass
@@ -22,10 +26,10 @@ class Visualizer:
     def run(self):
         running = True
         while running:
-            self.event()
+            running = self.event()
             self.status_update()
             self.rendering()
-            if running = self.event()
+            
 
         if not running:
             pygame.quit()
