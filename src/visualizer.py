@@ -21,7 +21,16 @@ class Visualizer:
         pass
 
     def rendering(self):
-        pass
+        self.screen.fill((0, 0, 0))
+        for threat in self.threats:
+            if threat.type == "BallisticMissile":                                       
+                color = (255, 0, 0)         
+            elif threat.type == "CruiseMissile":                                        
+                color = (255, 165, 0)
+            else:                                                                         
+                color = (255, 255, 0)
+            
+            pygame.draw.circle(self.screen, color, (threat.x, threat.y), 5) 
 
     def run(self):
         running = True
