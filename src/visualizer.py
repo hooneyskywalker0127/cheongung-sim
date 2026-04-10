@@ -9,6 +9,8 @@ class Visualizer:
         self.radar = radar
         pygame.init()
         self.screen = pygame.display.set_mode(self.size)
+        self.clock = pygame.time.Clock()
+
 
     def event(self):
         for event in pygame.event.get():                                              
@@ -31,15 +33,14 @@ class Visualizer:
                 color = (255, 255, 0)
             
             pygame.draw.circle(self.screen, color, (threat.x, threat.y), 5) 
-
+            pygame.display.flip()
     def run(self):
         running = True
         while running:
             running = self.event()
             self.status_update()
             self.rendering()
-            
-
+            self.clock.tick(60)
         if not running:
             pygame.quit()
 
