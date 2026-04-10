@@ -1,3 +1,4 @@
+import pygame
 
 
 class Visualizer:
@@ -6,8 +7,28 @@ class Visualizer:
         self.threats = threats
         self.missiles = missiles
         self.radar = radar
+        pygame.init()
+        self.screen = pygame.display.set_mode(self.size)
 
+    def event(self):
+        pass
 
+    def status_update(self):
+        pass
+
+    def rendering(self):
+        pass
+
+    def run(self):
+        running = True
+        while running:
+            self.event()
+            self.status_update()
+            self.rendering()
+            if running = self.event()
+
+        if not running:
+            pygame.quit()
 
 
 
