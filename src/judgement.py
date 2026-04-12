@@ -1,7 +1,7 @@
 import math
 
 class HitJudgement:
-    def __init__(self, target_x, target_y, kill_radius=50, target_radius = 100):
+    def __init__(self, target_x, target_y, kill_radius=20, target_radius=60):
         self.kill_radius = kill_radius
         self.target_radius = target_radius
         self.target_x = target_x
