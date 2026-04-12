@@ -161,9 +161,17 @@ class Visualizer:
 
         # 레이더/기지
         rx, ry = self.radar.radar_x, self.radar.radar_y
+        hp_ratio = max(0, self.target_hp) / self.target_max_hp
+        bar_color = (0, 255, 0) if hp_ratio > 0.5 else (255, 165, 0) if hp_ratio > 0.25 else (255, 0, 0)
         pygame.draw.rect(self.screen, (0, 255, 0), (rx - 8, ry - 8, 16, 16))
         label = self.font.render("KM-SAM II", True, (0, 255, 0))
         self.screen.blit(label, (rx - 30, ry + 12))
+        # HP 바 (기지 위에)
+        bar_w = 80
+        pygame.draw.rect(self.screen, (60, 60, 60), (rx - bar_w // 2, ry - 28, bar_w, 8))
+        pygame.draw.rect(self.screen, bar_color, (rx - bar_w // 2, ry - 28, int(bar_w * hp_ratio), 8))
+        hp_text = self.font.render(f"{max(0, self.target_hp)}", True, bar_color)
+        self.screen.blit(hp_text, (rx - bar_w // 2, ry - 46))
 
         # 폭발 이펙트
         for exp in self.explosions:
