@@ -24,6 +24,13 @@ class Visualizer:
     def status_update(self):
         text = self.font.render(f"Missiles: {len(self.missiles)}", True, (255, 255, 255))
         self.screen.blit(text, (10, 10))
+        hp_text = self.font.render(f"Base HP: {max(0, self.target_hp)}", True, (0, 255, 0))
+        self.screen.blit(hp_text, (10, 40))
+        # HP 바
+        bar_width = 200
+        hp_ratio = max(0, self.target_hp) / self.target_max_hp
+        pygame.draw.rect(self.screen, (100, 100, 100), (10, 70, bar_width, 15))
+        pygame.draw.rect(self.screen, (0, 255, 0), (10, 70, int(bar_width * hp_ratio), 15))
 
     def rendering(self):
         self.screen.fill((0, 0, 0))
