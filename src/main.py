@@ -1,5 +1,5 @@
 import pygame
-import sys
+import random
 from threat import BallisticMissile, CruiseMissile, Drone
 from radar import Radar
 from engagement import Engagement
@@ -8,29 +8,39 @@ from metrics import Metrics
 from visualizer import Visualizer, ResultGraph
 
 
+def spawn_threat():
+    t = random.choice(["ballistic", "cruise", "drone"])
+    if t == "ballistic":
+        return BallisticMissile(location=(780, random.randint(300, 550)), velocity=(-30, -10), power=100)
+    elif t == "cruise":
+        return CruiseMissile(location=(780, random.randint(200, 400)), velocity=(-25, 0), power=50)
+    else:
+        return Drone(location=(780, random.randint(150, 400)), velocity=(-15, random.uniform(-3, 3)), power=20)
+
+
 def main():
     # 초기화
     radar = Radar(detection_range=600, radar_x=400, radar_y=300)
-    engagement = Engagement(radar=radar, remaining_missiles=20)
+    engagement = Engagement(radar=radar, remaining_missiles=50)
     judgement = HitJudgement(target_x=400, target_y=300)
     metrics = Metrics()
 
-    # 위협 생성
-    threats = [
-        BallisticMissile(location=(750, 500), velocity=(-80, -30), power=100),
-        CruiseMissile(location=(780, 300), velocity=(-60, 0), power=50),
-        Drone(location=(700, 250), velocity=(-20, -5), power=20),
-    ]
+    # 초기 위협 생성
+    threats = [spawn_threat() for _ in range(6)]
 
     # pygame 초기화
     visualizer = Visualizer(threats, engagement.missiles, radar)
     clock = pygame.time.Clock()
 
+    spawn_timer = 0
+    spawn_interval = 3.0  # 3초마다 새 위협 생성
+    battle_duration = 60.0  # 60초 동안 전투
+    elapsed = 0
+
     running = True
     while running:
-        dt = clock.tick(60) / 1000  # 초 단위
+        dt = clock.tick(60) / 1000
 
-        # 종료 이벤트
         running = visualizer.event()
 
         # 위협 위치 업데이트
@@ -40,12 +50,12 @@ def main():
         # 레이더 스캔
         detected = radar.scan(threats)
 
-        # 우선순위 → 요격 미사일 발사
+        # 우선순위 → 요격
         if detected:
             prioritized = engagement.assign_priority(detected)
             engagement.intercept(prioritized)
 
-        # 미사일 위치 업데이트
+        # 미사일 업데이트
         engagement.update_missiles(dt)
 
         # 충돌 판정 — 요격 성공
@@ -65,15 +75,27 @@ def main():
                 metrics.record_fail(threat.type)
                 threats.remove(threat)
 
-        # 전투 시간 기록
+        # 화면 밖 위협 제거
+        for threat in threats[:]:
+            if threat.x < 0 or threat.x > 800:
+                threats.remove(threat)
+
+        # 새 위협 스폰
+        spawn_timer += dt
+        if spawn_timer >= spawn_interval:
+            threats.append(spawn_threat())
+            spawn_timer = 0
+
+        # 시간 기록
         metrics.record_battle_time(dt)
+        elapsed += dt
 
         # 렌더링
         visualizer.rendering()
         visualizer.status_update()
 
-        # 위협 전부 처리되면 종료
-        if not threats:
+        # 60초 후 종료
+        if elapsed >= battle_duration:
             running = False
 
     pygame.quit()
