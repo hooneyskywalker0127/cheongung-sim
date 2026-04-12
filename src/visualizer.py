@@ -2,11 +2,13 @@ import pygame
 import matplotlib.pyplot as plt
 
 class Visualizer:
-    def __init__(self,threats,missiles,radar):
+    def __init__(self,threats,missiles,radar, target_hp=1000):
         self.size = (800,600)
         self.threats = threats
         self.missiles = missiles
         self.radar = radar
+        self.target_hp = target_hp
+        self.target_max_hp = target_hp
         pygame.init()
         self.screen = pygame.display.set_mode(self.size)
         self.clock = pygame.time.Clock()
