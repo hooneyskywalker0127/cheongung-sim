@@ -36,7 +36,7 @@ def main():
 
     # pygame 초기화
     target_hp = 1000
-    visualizer = Visualizer(threats, engagement.missiles, radar, target_hp)
+    visualizer = Visualizer(threats, engagement.missiles, radar, target_hp, engagement)
     clock = pygame.time.Clock()
 
     # 인트로
