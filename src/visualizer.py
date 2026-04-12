@@ -28,13 +28,14 @@ class Explosion:
 
 
 class Visualizer:
-    def __init__(self, threats, missiles, radar, target_hp=1000):
+    def __init__(self, threats, missiles, radar, target_hp=1000, engagement=None):
         self.size = (800, 600)
         self.threats = threats
         self.missiles = missiles
         self.radar = radar
         self.target_hp = target_hp
         self.target_max_hp = target_hp
+        self.engagement = engagement
         self.explosions = []
         self.trails = {}  # id → [(x, y), ...]
 
@@ -116,15 +117,23 @@ class Visualizer:
         for t in self.threats:
             threat_counts[t.type] += 1
 
+        remaining = self.engagement.remaining_missiles if self.engagement else 0
+        ammo_color = (255, 0, 0) if remaining <= 5 else (255, 165, 0) if remaining <= 10 else (0, 220, 0)
         lines = [
-            f"INTERCEPTORS : {len(self.missiles)}",
-            f"BALLISTIC    : {threat_counts['BallisticMissile']}",
-            f"CRUISE       : {threat_counts['CruiseMissile']}",
-            f"DRONE        : {threat_counts['Drone']}",
+            (f"AMMO         : {remaining}", ammo_color),
+            (f"IN FLIGHT    : {len(self.missiles)}", (0, 220, 0)),
+            (f"BALLISTIC    : {threat_counts['BallisticMissile']}", (255, 50, 50)),
+            (f"CRUISE       : {threat_counts['CruiseMissile']}", (255, 165, 0)),
+            (f"DRONE        : {threat_counts['Drone']}", (255, 255, 0)),
         ]
-        for i, line in enumerate(lines):
-            text = self.font.render(line, True, (0, 220, 0))
+        for i, (line, color) in enumerate(lines):
+            text = self.font.render(line, True, color)
             self.screen.blit(text, (10, 10 + i * 24))
+
+        # AMMO LOW 경고
+        if remaining <= 5:
+            warn = self.font_large.render("!! AMMO LOW !!", True, (255, 0, 0))
+            self.screen.blit(warn, (400 - warn.get_width() // 2, 10))
 
         # HP 바
         hp_ratio = max(0, self.target_hp) / self.target_max_hp
