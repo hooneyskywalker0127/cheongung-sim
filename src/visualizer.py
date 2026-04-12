@@ -142,6 +142,7 @@ class Visualizer:
         self._draw_trails()
 
         # 위협 렌더링
+        label_map = {"BallisticMissile": "BM", "CruiseMissile": "CM", "Drone": "DR"}
         for threat in self.threats:
             if threat.type == "BallisticMissile":
                 color = (255, 50, 50)
@@ -149,7 +150,10 @@ class Visualizer:
                 color = (255, 165, 0)
             else:
                 color = (255, 255, 0)
-            pygame.draw.circle(self.screen, color, (int(threat.x), int(threat.y)), 6)
+            x, y = int(threat.x), int(threat.y)
+            pygame.draw.circle(self.screen, color, (x, y), 6)
+            label = self.font.render(label_map[threat.type], True, color)
+            self.screen.blit(label, (x + 8, y - 10))
 
         # 요격 미사일 렌더링
         for missile in self.missiles:
@@ -182,11 +186,11 @@ class Visualizer:
 
 def show_intro(screen, font_large, font):
     lines = [
-        "2026. UAE, 호르무즈 해협",
-        "이란의 탄도미사일 포대가 발사 준비를 마쳤다.",
+        "2026. Strait of Hormuz, UAE",
+        "Iranian ballistic missile batteries are ready to launch.",
         "",
-        "천궁-II (KM-SAM II)",
-        "실전 요격 시뮬레이션",
+        "Cheongung-II  (KM-SAM II)",
+        "Air Defense Intercept Simulation",
         "",
         "[ Press SPACE to Start ]",
     ]
