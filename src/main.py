@@ -33,6 +33,9 @@ def main():
     visualizer = Visualizer(threats, engagement.missiles, radar, target_hp)
     clock = pygame.time.Clock()
 
+    # 인트로
+    show_intro(visualizer.screen, visualizer.font_large, visualizer.font)
+
     spawn_timer = 0
     spawn_interval = 3.0  # 3초마다 새 위협 생성
     battle_duration = 60.0  # 60초 동안 전투
