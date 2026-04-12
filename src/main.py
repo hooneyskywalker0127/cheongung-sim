@@ -5,7 +5,7 @@ from radar import Radar
 from engagement import Engagement
 from judgement import HitJudgement
 from metrics import Metrics
-from visualizer import Visualizer, ResultGraph
+from visualizer import Visualizer, ResultGraph, show_intro
 
 
 def spawn_threat():
