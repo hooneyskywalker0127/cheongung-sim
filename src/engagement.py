@@ -30,7 +30,7 @@ class Engagement:
                 return False
             if id(threat) in already_targeted:
                 continue
-            missile = InterceptMissile(0, 0, threat.x, threat.y, threat)
+            missile = InterceptMissile(self.radar.radar_x, self.radar.radar_y, threat.x, threat.y, threat)
             self.missiles.append(missile)
             self.remaining_missiles -= 1
             already_targeted.add(id(threat))
