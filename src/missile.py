@@ -1,7 +1,7 @@
 import math
 
 class InterceptMissile:
-    def __init__(self,x,y,target_x, target_y):
+    def __init__(self,x,y,target_x, target_y,threat):
         self.x = x
         self.y = y
         self.target_x = target_x
@@ -11,7 +11,7 @@ class InterceptMissile:
         self.vx = (target_x-x) / distance * self.speed
         self.vy = (target_y-y) / distance * self.speed
         self.phase = 1
-
+        self.threat = threat
 
     def update(self, dt, threat):
         self.x += self.vx*dt
