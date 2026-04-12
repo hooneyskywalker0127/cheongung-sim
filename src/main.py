@@ -11,11 +11,11 @@ from visualizer import Visualizer, ResultGraph
 def spawn_threat():
     t = random.choice(["ballistic", "cruise", "drone"])
     if t == "ballistic":
-        return BallisticMissile(location=(780, random.randint(300, 550)), velocity=(-30, -10), power=100)
+        return BallisticMissile(location=(780, random.randint(350, 560)), velocity=(random.uniform(-120, -80), random.uniform(-60, -20)), power=100)
     elif t == "cruise":
-        return CruiseMissile(location=(780, random.randint(200, 400)), velocity=(-25, 0), power=50)
+        return CruiseMissile(location=(780, random.randint(200, 420)), velocity=(random.uniform(-90, -60), 0), power=50)
     else:
-        return Drone(location=(780, random.randint(150, 400)), velocity=(-15, random.uniform(-3, 3)), power=20)
+        return Drone(location=(780, random.randint(150, 420)), velocity=(random.uniform(-50, -30), random.uniform(-10, 10)), power=20)
 
 
 def main():
@@ -78,12 +78,17 @@ def main():
                 metrics.record_fail(threat.type)
                 threats.remove(threat)
 
-        # 화면 밖 위협/미사일 제거
+        # 화면 밖 위협 제거
         for threat in threats[:]:
             if threat.x < 0 or threat.x > 800:
                 threats.remove(threat)
+
+        # 화면 밖 미사일 제거 + 타겟 사라진 미사일 제거
+        active_threat_ids = {id(t) for t in threats}
         for missile in engagement.missiles[:]:
             if missile.x < 0 or missile.x > 800 or missile.y < 0 or missile.y > 600:
+                engagement.missiles.remove(missile)
+            elif id(missile.threat) not in active_threat_ids:
                 engagement.missiles.remove(missile)
 
         # 새 위협 스폰
