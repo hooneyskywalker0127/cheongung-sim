@@ -109,6 +109,12 @@ def main():
             threats.append(spawn_threat())
             spawn_timer = 0
 
+        # 포화공격
+        salvo_timer += dt
+        if salvo_timer >= salvo_interval:
+            threats.extend(spawn_salvo())
+            salvo_timer = 0
+
         # 시간 기록
         metrics.record_battle_time(dt)
         elapsed += dt
