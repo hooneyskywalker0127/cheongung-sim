@@ -10,12 +10,27 @@ from visualizer import Visualizer, ResultGraph, show_intro
 
 def spawn_threat():
     t = random.choice(["ballistic", "cruise", "drone"])
+    direction = random.choice(["right", "top", "bottom"])
+
+    if direction == "right":
+        x, y = 780, random.randint(100, 500)
+        vx, vy_base = random.uniform(-1.2, -0.8), 0
+    elif direction == "top":
+        x, y = random.randint(100, 700), 10
+        vx, vy_base = 0, random.uniform(0.8, 1.2)
+    else:  # bottom
+        x, y = random.randint(100, 700), 590
+        vx, vy_base = 0, random.uniform(-1.2, -0.8)
+
     if t == "ballistic":
-        return BallisticMissile(location=(780, random.randint(350, 560)), velocity=(random.uniform(-180, -120), random.uniform(-80, -30)), power=150)
+        speed = random.uniform(150, 180)
+        return BallisticMissile(location=(x, y), velocity=(vx * speed, vy_base * speed + random.uniform(-40, -20)), power=150)
     elif t == "cruise":
-        return CruiseMissile(location=(780, random.randint(200, 420)), velocity=(random.uniform(-120, -80), 0), power=80)
+        speed = random.uniform(80, 120)
+        return CruiseMissile(location=(x, y), velocity=(vx * speed, vy_base * speed), power=80)
     else:
-        return Drone(location=(780, random.randint(150, 420)), velocity=(random.uniform(-70, -40), random.uniform(-15, 15)), power=30)
+        speed = random.uniform(40, 70)
+        return Drone(location=(x, y), velocity=(vx * speed + random.uniform(-10, 10), vy_base * speed + random.uniform(-15, 15)), power=30)
 
 
 def spawn_salvo():
@@ -45,7 +60,11 @@ def main():
     spawn_timer = 0
     spawn_interval = 4.0
     salvo_timer = 0
-    salvo_interval = 15.0  # 15초마다 포화공격
+    salvo_interval = 15.0
+    reload_timer = 0
+    reload_interval = 10.0  # 10초마다 재장전
+    reload_amount = 4       # 한 번에 4발 충전
+    max_missiles = 20
     battle_duration = 60.0
     elapsed = 0
 
@@ -65,7 +84,7 @@ def main():
         # 우선순위 → 요격
         if detected:
             prioritized = engagement.assign_priority(detected)
-            engagement.intercept(prioritized)
+            engagement.intercept(prioritized, dt)
 
         # 미사일 업데이트
         engagement.update_missiles(dt)
@@ -92,7 +111,7 @@ def main():
 
         # 화면 밖 위협 제거
         for threat in threats[:]:
-            if threat.x < 0 or threat.x > 800:
+            if threat.x < 0 or threat.x > 800 or threat.y < 0 or threat.y > 600:
                 threats.remove(threat)
 
         # 화면 밖 미사일 제거 + 타겟 사라진 미사일 제거
@@ -115,6 +134,13 @@ def main():
             threats.extend(spawn_salvo())
             salvo_timer = 0
 
+        # 재장전
+        reload_timer += dt
+        visualizer.reload_timer = reload_timer
+        if reload_timer >= reload_interval:
+            engagement.remaining_missiles = min(engagement.remaining_missiles + reload_amount, max_missiles)
+            reload_timer = 0
+
         # 시간 기록
         metrics.record_battle_time(dt)
         elapsed += dt
@@ -122,6 +148,7 @@ def main():
         # 렌더링
         visualizer.rendering()
         visualizer.status_update()
+        pygame.display.flip()
 
         # HP 0 또는 60초 후 종료
         if target_hp <= 0 or elapsed >= battle_duration:

@@ -1,8 +1,8 @@
 # System Architecture
 
 **Project Name:** Cheongung Sim  
-**Date:** 2026-04-04  
-**Version:** 0.1  
+**Date:** 2026-04-04 | **Last Updated:** 2026-04-12  
+**Version:** 1.0 (Complete)
 
 ---
 
@@ -77,10 +77,13 @@ Evaluates detected threats and decides intercept missile assignment.
 
 - **Priority score calculation:**
   - Speed (faster = higher score)
-  - Altitude (lower = higher score — less time to intercept)
-  - Remaining distance to defense target (closer = higher score)
-- Engagement Window calculation
-- Manages remaining intercept missile count
+  - Distance to base (closer = higher score)
+- **Engagement filter:**
+  - Minimum speed threshold 25 (skips stationary threats)
+  - 5-second trajectory prediction — only engage threats predicted to enter 150px of base
+- Fire interval: 0.8 seconds (prevents burst firing)
+- Max simultaneous engagements: 5
+- Manages remaining intercept missiles (initial 20, auto-reload 4 every 10 seconds)
 
 ### InterceptMissile
 Tracks the target using a 3-phase guidance system.
@@ -158,8 +161,16 @@ Collects and stores simulation data.
 - Saved as CSV / JSON
 
 ### Visualizer
-- **pygame:** Real-time 2D rendering (threats, intercept missiles, radar range, explosion effects)
-- **matplotlib:** Metrics graphs output after simulation ends
+- **pygame:** Real-time 2D rendering
+  - Grid background, radar detection range circle
+  - Per-threat color (red/orange/yellow) + trail effect + label (BM/CM/DR)
+  - Intercept missiles (blue) + trail
+  - Explosion effect (`Explosion` class — ring + fade-out)
+  - Base icon + HP bar (green → orange → red)
+  - Military HUD: AMMO / IN FLIGHT / RELOAD timer / threat counts / BASE HP
+  - AMMO LOW warning (≤5 rounds)
+- **Intro screen:** `show_intro()` — mission background text + space to start
+- **matplotlib:** Post-simulation metrics graph (dark theme)
 
 ---
 

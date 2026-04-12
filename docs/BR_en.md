@@ -1,8 +1,8 @@
 # Business Requirements Document
 
 **Project Name:** Cheongung Sim  
-**Date:** 2026-04-04  
-**Version:** 0.1  
+**Date:** 2026-04-04 | **Last Updated:** 2026-04-12  
+**Version:** 1.0 (Complete)
 
 ---
 
@@ -73,7 +73,21 @@ This project aims to implement an intercept simulation based on Cheongung-II's a
 
 ### 4.7 Visualization
 - **pygame:** Real-time 2D simulation (threat trajectories, missile paths, collision events)
-- **matplotlib:** Post-simulation metrics graphs
+- Grid background, radar detection range circle, per-threat trail effect, explosion effect
+- Military HUD (ammo count, reload timer, threat type counters, base HP bar)
+- Intro screen (mission background text + space to start)
+- **matplotlib:** Post-simulation metrics graphs (dark theme)
+
+### 4.8 Reload System
+- Initial intercept missiles: 20 rounds
+- Auto-reload 4 rounds every 10 seconds (max 20)
+- "AMMO LOW" warning when 5 or fewer rounds remain
+
+### 4.9 Threat Spawn System
+- 3-directional spawn: right / top / bottom
+- 1 threat spawned every 4 seconds
+- Saturation attack every 15 seconds: 5–8 threats simultaneously
+- Auto-end after 60 seconds of combat or when base HP reaches 0
 
 ---
 
@@ -89,12 +103,14 @@ This project aims to implement an intercept simulation based on Cheongung-II's a
 
 ---
 
-## 6. Success Criteria
+## 6. Success Criteria ✅ All Achieved
 
-- Priority-based engagement works correctly in a scenario with all 3 threat types launched simultaneously
-- 3-phase guidance logic is implemented so the missile behaves differently in each phase
-- Real-time simulation is visually verifiable via pygame
-- Metrics graph is output after simulation ends
+- [x] Priority-based engagement works correctly in a scenario with all 3 threat types launched simultaneously
+- [x] 3-phase guidance logic implemented — missile behaves differently in each phase
+- [x] Real-time simulation visually verifiable via pygame
+- [x] Metrics graph output after simulation ends
+- [x] Priority-based selective engagement under saturation attack scenario
+- [x] Reload system enables sustained engagement over extended combat
 
 ---
 

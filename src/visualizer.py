@@ -36,6 +36,8 @@ class Visualizer:
         self.target_hp = target_hp
         self.target_max_hp = target_hp
         self.engagement = engagement
+        self.reload_timer = 0
+        self.reload_interval = 10.0
         self.explosions = []
         self.trails = {}  # id → [(x, y), ...]
 
@@ -112,36 +114,45 @@ class Visualizer:
                 pygame.draw.circle(self.screen, faded, pos, 2)
 
     def status_update(self):
-        # 위협 카운트
         threat_counts = {"BallisticMissile": 0, "CruiseMissile": 0, "Drone": 0}
         for t in self.threats:
             threat_counts[t.type] += 1
 
         remaining = self.engagement.remaining_missiles if self.engagement else 0
         ammo_color = (255, 0, 0) if remaining <= 5 else (255, 165, 0) if remaining <= 10 else (0, 220, 0)
-        lines = [
-            (f"AMMO         : {remaining}", ammo_color),
-            (f"IN FLIGHT    : {len(self.missiles)}", (0, 220, 0)),
-            (f"BALLISTIC    : {threat_counts['BallisticMissile']}", (255, 50, 50)),
-            (f"CRUISE       : {threat_counts['CruiseMissile']}", (255, 165, 0)),
-            (f"DRONE        : {threat_counts['Drone']}", (255, 255, 0)),
-        ]
-        for i, (line, color) in enumerate(lines):
-            text = self.font.render(line, True, color)
-            self.screen.blit(text, (10, 10 + i * 24))
+
+        y = 10
+        gap = 22
+
+        # 탄약
+        self.screen.blit(self.font.render(f"AMMO      : {remaining}", True, ammo_color), (10, y)); y += gap
+        self.screen.blit(self.font.render(f"IN FLIGHT : {len(self.missiles)}", True, (0, 220, 0)), (10, y)); y += gap
+
+        # 재장전 바
+        reload_ratio = min(1.0, self.reload_timer / self.reload_interval)
+        reload_color = (0, 180, 255)
+        self.screen.blit(self.font.render(f"RELOAD    : {self.reload_interval - self.reload_timer:.1f}s", True, reload_color), (10, y)); y += gap
+        pygame.draw.rect(self.screen, (40, 40, 80), (10, y, 160, 8))
+        pygame.draw.rect(self.screen, reload_color, (10, y, int(160 * reload_ratio), 8)); y += 16
+
+        # 위협 카운트
+        y += 6
+        self.screen.blit(self.font.render(f"BALLISTIC : {threat_counts['BallisticMissile']}", True, (255, 50, 50)), (10, y)); y += gap
+        self.screen.blit(self.font.render(f"CRUISE    : {threat_counts['CruiseMissile']}", True, (255, 165, 0)), (10, y)); y += gap
+        self.screen.blit(self.font.render(f"DRONE     : {threat_counts['Drone']}", True, (255, 255, 0)), (10, y)); y += gap
+
+        # HP 바
+        y += 6
+        hp_ratio = max(0, self.target_hp) / self.target_max_hp
+        bar_color = (0, 255, 0) if hp_ratio > 0.5 else (255, 165, 0) if hp_ratio > 0.25 else (255, 0, 0)
+        self.screen.blit(self.font.render(f"BASE HP   : {max(0, self.target_hp)}", True, bar_color), (10, y)); y += gap
+        pygame.draw.rect(self.screen, (60, 60, 60), (10, y, 200, 10))
+        pygame.draw.rect(self.screen, bar_color, (10, y, int(200 * hp_ratio), 10))
 
         # AMMO LOW 경고
         if remaining <= 5:
             warn = self.font_large.render("!! AMMO LOW !!", True, (255, 0, 0))
             self.screen.blit(warn, (400 - warn.get_width() // 2, 10))
-
-        # HP 바
-        hp_ratio = max(0, self.target_hp) / self.target_max_hp
-        bar_color = (0, 255, 0) if hp_ratio > 0.5 else (255, 165, 0) if hp_ratio > 0.25 else (255, 0, 0)
-        hp_label = self.font.render(f"BASE HP : {max(0, self.target_hp)}", True, bar_color)
-        self.screen.blit(hp_label, (10, 115))
-        pygame.draw.rect(self.screen, (60, 60, 60), (10, 138, 200, 12))
-        pygame.draw.rect(self.screen, bar_color, (10, 138, int(200 * hp_ratio), 12))
 
     def rendering(self):
         self.screen.fill((0, 8, 0))
@@ -187,8 +198,6 @@ class Visualizer:
             exp.update()
             exp.draw(self.screen)
         self.explosions = [e for e in self.explosions if not e.done]
-
-        pygame.display.flip()
 
     def run(self):
         running = True
