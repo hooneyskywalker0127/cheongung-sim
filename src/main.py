@@ -29,7 +29,8 @@ def main():
     threats = [spawn_threat() for _ in range(6)]
 
     # pygame 초기화
-    visualizer = Visualizer(threats, engagement.missiles, radar)
+    target_hp = 1000
+    visualizer = Visualizer(threats, engagement.missiles, radar, target_hp)
     clock = pygame.time.Clock()
 
     spawn_timer = 0
