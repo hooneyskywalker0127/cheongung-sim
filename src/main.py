@@ -68,6 +68,7 @@ def main():
                 if judgement.check_intercept(missile, threat):
                     metrics.record_success(threat.type)
                     metrics.record_used_missile()
+                    visualizer.add_explosion(threat.x, threat.y)
                     engagement.missiles.remove(missile)
                     threats.remove(threat)
                     break
