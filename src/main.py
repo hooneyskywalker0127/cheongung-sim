@@ -69,17 +69,22 @@ def main():
                     threats.remove(threat)
                     break
 
-        # 충돌 판정 — 피격
+        # 충돌 판정 — 피격 (HP 데미지)
         for threat in threats[:]:
             if judgement.check_hit(threat):
+                target_hp -= threat.power
+                visualizer.target_hp = target_hp
                 metrics.record_hit(threat.type)
                 metrics.record_fail(threat.type)
                 threats.remove(threat)
 
-        # 화면 밖 위협 제거
+        # 화면 밖 위협/미사일 제거
         for threat in threats[:]:
             if threat.x < 0 or threat.x > 800:
                 threats.remove(threat)
+        for missile in engagement.missiles[:]:
+            if missile.x < 0 or missile.x > 800 or missile.y < 0 or missile.y > 600:
+                engagement.missiles.remove(missile)
 
         # 새 위협 스폰
         spawn_timer += dt
