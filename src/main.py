@@ -100,8 +100,8 @@ def main():
         visualizer.rendering()
         visualizer.status_update()
 
-        # 60초 후 종료
-        if elapsed >= battle_duration:
+        # HP 0 또는 60초 후 종료
+        if target_hp <= 0 or elapsed >= battle_duration:
             running = False
 
     pygame.quit()
