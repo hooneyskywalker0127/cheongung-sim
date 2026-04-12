@@ -11,22 +11,28 @@ from visualizer import Visualizer, ResultGraph, show_intro
 def spawn_threat():
     t = random.choice(["ballistic", "cruise", "drone"])
     if t == "ballistic":
-        return BallisticMissile(location=(780, random.randint(350, 560)), velocity=(random.uniform(-120, -80), random.uniform(-60, -20)), power=100)
+        return BallisticMissile(location=(780, random.randint(350, 560)), velocity=(random.uniform(-180, -120), random.uniform(-80, -30)), power=150)
     elif t == "cruise":
-        return CruiseMissile(location=(780, random.randint(200, 420)), velocity=(random.uniform(-90, -60), 0), power=50)
+        return CruiseMissile(location=(780, random.randint(200, 420)), velocity=(random.uniform(-120, -80), 0), power=80)
     else:
-        return Drone(location=(780, random.randint(150, 420)), velocity=(random.uniform(-50, -30), random.uniform(-10, 10)), power=20)
+        return Drone(location=(780, random.randint(150, 420)), velocity=(random.uniform(-70, -40), random.uniform(-15, 15)), power=30)
+
+
+def spawn_salvo():
+    """포화공격 — 위협 5~8개 동시 생성"""
+    count = random.randint(5, 8)
+    return [spawn_threat() for _ in range(count)]
 
 
 def main():
     # 초기화
     radar = Radar(detection_range=600, radar_x=400, radar_y=300)
-    engagement = Engagement(radar=radar, remaining_missiles=50)
+    engagement = Engagement(radar=radar, remaining_missiles=20)
     judgement = HitJudgement(target_x=400, target_y=300)
     metrics = Metrics()
 
     # 초기 위협 생성
-    threats = [spawn_threat() for _ in range(6)]
+    threats = [spawn_threat() for _ in range(4)]
 
     # pygame 초기화
     target_hp = 1000
@@ -37,8 +43,10 @@ def main():
     show_intro(visualizer.screen, visualizer.font_large, visualizer.font)
 
     spawn_timer = 0
-    spawn_interval = 3.0  # 3초마다 새 위협 생성
-    battle_duration = 60.0  # 60초 동안 전투
+    spawn_interval = 4.0
+    salvo_timer = 0
+    salvo_interval = 15.0  # 15초마다 포화공격
+    battle_duration = 60.0
     elapsed = 0
 
     running = True
